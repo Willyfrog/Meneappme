@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/GeneralLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+    <Spinner
+	    android:id="@+id/feedSpin"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+	    />
+    <ListView
+        android:id="@+id/titularesList"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="5" 
+		/>
+    
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+         />
+
+    <LinearLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.75"
+        android:gravity="right" >
+        
+        <ImageButton
+            android:id="@+id/placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_delete"
+            android:contentDescription="Placeholder Adds"
+             />
+
+        <ImageButton
+            android:id="@+id/refreshBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/stat_notify_sync" 
+            android:contentDescription="Recargar noticias"/>
+
+    </LinearLayout>
+
+</LinearLayout>
