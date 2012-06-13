@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:textStyle="bold"
-        android:textSize="14sp" 
+        android:textSize="14sp"
+        android:text="Titular de prueba" 
         />
     
     <LinearLayout
@@ -24,6 +25,24 @@
         android:textStyle="normal"
         android:textSize="12sp"
         android:text="prueba.com"
+        />
+        
+        <TextView 
+        android:id="@+id/LblUpVotes"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="normal"
+        android:textSize="12sp"
+        android:text="128"
+        />
+        
+        <TextView 
+        android:id="@+id/LblDownVotes"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textStyle="normal"
+        android:textSize="12sp"
+        android:text="128"
         />
         
         <TextView 
