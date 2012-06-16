@@ -36,10 +36,8 @@ public class Meneappme extends Activity {
 	static final String LOGTAG = "Meneapp";
 	private List<Titular> datos;
 	
-	private Feed[] feeds = new Feed[] {
-			new Feed("Portada", "http://www.meneame.net/rss2.php&rows=10"),	// TODO: parametrizar numero de items
-			new Feed("Pendientes", "http://www.meneame.net/rss2.php?status=queued") 	// uri: http://www.meneame.net/rss2.php?status=queued
-	};
+	private Feed[] feeds; 
+
 	private ListView listaTitulares;
 	
 	private ActionBar abar;
@@ -54,10 +52,14 @@ public class Meneappme extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	Log.i(LOGTAG, "Arrancando");
         super.onCreate(savedInstanceState);
+        Log.i(LOGTAG, "Arrancando");
         setContentView(R.layout.main);
 
+        feeds = new Feed[] {
+    			new Feed("Portada", this.getString(R.string.feedPortada) + "?rows=30"),	// TODO: parametrizar numero de items
+    			new Feed("Pendientes", this.getString(R.string.feedPendientes))}; 	// uri: http://www.meneame.net/rss2.php?status=queued
+        
         ArrayAdapter<Feed> feedAdapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_spinner_dropdown_item, feeds);
         listaTitulares = (ListView) findViewById(R.id.titularesList);
         final Spinner listaFeeds = (Spinner) findViewById(R.id.feedSpin);
@@ -70,18 +72,18 @@ public class Meneappme extends Activity {
 				fetchFeed(f.getUrl());
 			}
 		});
-        
-		fetchFeed("http://www.meneame.net/rss2.php&rows=10"); //TODO: parametrizar
-		if (datos == null){
+        datos = new ArrayList<Titular>();
+		fetchFeed(this.getString(R.string.feedPortada) + "&rows=20"); //TODO: parametrizar
+		/*if (datos == null){
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("No hay conexion a internet");
 			AlertDialog alerta = builder.show();
-			datos = new ArrayList<Titular>();
+			
 		}
 		else{	
 			listaTitulares.setAdapter(new TitularAdapter(this, datos));
 		}
-        listaFeeds.setAdapter(feedAdapter);
+        listaFeeds.setAdapter(feedAdapter);*/
         
     }
     
@@ -118,7 +120,7 @@ public class Meneappme extends Activity {
     				e.printStackTrace();
     			}
     			if (feed!=null){
-    				return new RssParser(feed).parse();
+    				return new RssDomParser(feed).parse();
     			}
     		}
     		

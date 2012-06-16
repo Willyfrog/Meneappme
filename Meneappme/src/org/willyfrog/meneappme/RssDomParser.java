@@ -45,7 +45,7 @@ public class RssDomParser {
 			//Se crea el dom
 			Document dom = constructor.parse(feedUrl);
 			Element root = dom.getDocumentElement();
-			NodeList lista = root.getElementsByTagName("items");
+			NodeList lista = root.getElementsByTagName("item");
 			Log.d("DomParser", "Leemos el doc. Elementos: " + lista.getLength());
 			
 			for (int i=0; i<lista.getLength(); i++){

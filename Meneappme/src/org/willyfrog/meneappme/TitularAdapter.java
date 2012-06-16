@@ -14,6 +14,8 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 		TextView titulo;
 		TextView dominio;
 		TextView autor;
+		public TextView upvotes;
+		public TextView downvotes;
 
 	}
 
@@ -45,6 +47,8 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 			holder.titulo = (TextView) item.findViewById(R.id.LblTitulo);
 			holder.dominio = (TextView) item.findViewById(R.id.LblDominio);
 			holder.autor = (TextView) item.findViewById(R.id.LblAutor);
+			holder.upvotes = (TextView) item.findViewById(R.id.LblUpVotes);
+			holder.downvotes = (TextView) item.findViewById(R.id.LblDownVotes);
 			
 			item.setTag(holder);
 		}
@@ -59,6 +63,12 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 		
 		TextView lblAutor = (TextView) item.findViewById(R.id.LblDominio);
 		lblAutor.setText(datos.get(position).getAutor());
+		
+		TextView lblUpVotes = (TextView) item.findViewById(R.id.LblUpVotes);
+		lblUpVotes.setText(datos.get(position).getPositivos());
+		
+		TextView lblDownVotes = (TextView) item.findViewById(R.id.LblDownVotes);
+		lblDownVotes.setText(datos.get(position).getNegativos());
 		
 		return item;
 	}
