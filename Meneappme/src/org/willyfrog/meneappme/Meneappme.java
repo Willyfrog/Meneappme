@@ -69,6 +69,7 @@ public class Meneappme extends Activity {
         Log.i(LOGTAG, "Arrancando");
         final ActionBar ab = getActionBar();
         ab.setNavigationMode(ab.NAVIGATION_MODE_LIST);
+        ab.setDisplayShowTitleEnabled(false);
         
         //TODO: añadir opciones a la barra
         feeds = new Feed[] {
