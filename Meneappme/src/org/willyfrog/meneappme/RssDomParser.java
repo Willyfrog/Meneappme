@@ -60,12 +60,25 @@ public class RssDomParser {
 					if (eti.equals("title")){
 						Log.d("DomParser", "add titulo");
 						titular.setTitulo(obtenerTexto(info));
-					}else if(eti.equals("url")){
+					}else if(eti.equals("meneame:url")){
 						Log.d("DomParser", "add link");
 						titular.setUrl(obtenerTexto(info));
-					}else if(eti.equals("user")){
+					}else if(eti.equals("meneame:user")){
 						Log.d("DomParser", "add autor");
 						titular.setAutor(obtenerTexto(info));
+					}else if(eti.equals("meneame:karma")){
+						//Integer karma = Integer.getInteger(obtenerTexto(info));
+						Log.d("DomParser", info.toString());
+						//Log.d("DomParser", "add karma:" + karma );
+						titular.setKarma(obtenerTexto(info));
+					}else if(eti.equals("meneame:votes")){
+						String posit = obtenerTexto(info);
+						Log.d("DomParser", "add positivos: " + posit);
+						titular.setPositivos(posit);
+					}else if(eti.equals("meneame:negatives")){
+						String negat = obtenerTexto(info);
+						Log.d("DomParser", "add negativos: " + negat);
+						titular.setNegativos(negat);
 					}
 					else{
 						Log.d("DomParser", "Sin manejar: " + info.getNodeName());

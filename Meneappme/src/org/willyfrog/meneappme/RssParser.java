@@ -84,7 +84,7 @@ public class RssParser {
 		item.getChild("votes").setEndTextElementListener(new EndTextElementListener() {
 			
 			public void end(String body) {
-				titular.setPositivos(Integer.parseInt(body)); //TODO: catch exceptions
+				titular.setPositivos(body); //TODO: catch exceptions
 			}
 		});
 

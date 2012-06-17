@@ -16,6 +16,7 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 		TextView autor;
 		public TextView upvotes;
 		public TextView downvotes;
+		public TextView karma;
 
 	}
 
@@ -47,6 +48,7 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 			holder.titulo = (TextView) item.findViewById(R.id.LblTitulo);
 			holder.dominio = (TextView) item.findViewById(R.id.LblDominio);
 			holder.autor = (TextView) item.findViewById(R.id.LblAutor);
+			holder.karma = (TextView) item.findViewById(R.id.LblKarma);
 			holder.upvotes = (TextView) item.findViewById(R.id.LblUpVotes);
 			holder.downvotes = (TextView) item.findViewById(R.id.LblDownVotes);
 			
@@ -55,6 +57,10 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 		else{
 			holder = (ViewHolder) item.getTag();
 		}
+		
+		TextView lblKarma = (TextView) item.findViewById(R.id.LblKarma);
+		lblKarma.setText(datos.get(position).getPositivos().toString());
+		
 		TextView lblTitulo = (TextView) item.findViewById(R.id.LblTitulo);
 		lblTitulo.setText(datos.get(position).getTitulo());
 		
@@ -65,10 +71,10 @@ public class TitularAdapter extends ArrayAdapter<Titular> {
 		lblAutor.setText(datos.get(position).getAutor());
 		
 		TextView lblUpVotes = (TextView) item.findViewById(R.id.LblUpVotes);
-		lblUpVotes.setText(datos.get(position).getPositivos());
+		lblUpVotes.setText(datos.get(position).getPositivos().toString());
 		
 		TextView lblDownVotes = (TextView) item.findViewById(R.id.LblDownVotes);
-		lblDownVotes.setText(datos.get(position).getNegativos());
+		lblDownVotes.setText(datos.get(position).getNegativos().toString());
 		
 		return item;
 	}

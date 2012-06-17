@@ -10,9 +10,10 @@ public class Titular {
 	private String autor;
 	private URL url;
 	private String dominio;
-	private Integer positivos;
-	private Integer negativos;
-	private Integer numComentarios;
+	private String positivos;
+	private String negativos;
+	private String karma;
+	private String numComentarios;
 	private URL feedComentarios;
 	
 	public Titular(){
@@ -20,10 +21,10 @@ public class Titular {
 	}
 	
 	public Titular(String titulo, String autor, String dominio){
-		this(titulo, autor, dominio, 0, 0, 0, null);
+		this(titulo, autor, dominio, "-", "-", "-", "-", null);
 	}
 	
-	public Titular(String titulo, String autor, String url, Integer positivos, Integer negativos, Integer numComents, String comentarios){
+	public Titular(String titulo, String autor, String url, String karma, String positivos, String negativos, String numComents, String comentarios){
 		this.titulo = titulo;
 		this.autor = autor;
 		setUrl(url);
@@ -45,19 +46,27 @@ public class Titular {
 	public String getDominio() {
 		return dominio;
 	}
-	public Integer getPositivos() {
+	public String getPositivos() {
 		return positivos;
 	}
-	public Integer getNegativos() {
+	public String getNegativos() {
 		return negativos;
 	}
-	public Integer getNumComentarios() {
+	public String getNumComentarios() {
 		return numComentarios;
 	}
 	public URL getFeedComentarios() {
 		return feedComentarios;
 	}
+	
+	public String getKarma() {
+		return karma;
+	}
 
+	public void setKarma(String karma) {
+		this.karma = karma;
+	}
+	
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
@@ -85,15 +94,15 @@ public class Titular {
 
 	}
 
-	public void setPositivos(Integer positivos) {
+	public void setPositivos(String positivos) {
 		this.positivos = positivos;
 	}
 
-	public void setNegativos(Integer negativos) {
+	public void setNegativos(String negativos) {
 		this.negativos = negativos;
 	}
 
-	public void setNumComentarios(Integer numComentarios) {
+	public void setNumComentarios(String numComentarios) {
 		this.numComentarios = numComentarios;
 	}
 

@@ -5,5 +5,7 @@
     <string name="app_name">Meneappme</string>
     <string name="feedPortada">http://www.meneame.net/rss2.php</string>
     <string name="feedPendientes">http://www.meneame.net/rss2.php?status=queued</string>
+    <string name="portada">Portada</string>
+    <string name="pendientes">Pendientes</string>
 
 </resources>

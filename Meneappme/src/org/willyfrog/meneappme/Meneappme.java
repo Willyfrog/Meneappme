@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -15,6 +16,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -22,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 
 
@@ -49,25 +53,48 @@ public class Meneappme extends Activity {
 		//progreso.hide();
 	}
 	
+	/*@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+			Boolean res = super.onCreateOptionsMenu(menu);
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(R.layout.menu, menu);
+			return res;
+	}*/
+	
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOGTAG, "Arrancando");
-        setContentView(R.layout.main);
-
+        final ActionBar ab = getActionBar();
+        ab.setNavigationMode(ab.NAVIGATION_MODE_LIST);
+        
+        //TODO: añadir opciones a la barra
         feeds = new Feed[] {
     			new Feed("Portada", this.getString(R.string.feedPortada) + "?rows=30"),	// TODO: parametrizar numero de items
     			new Feed("Pendientes", this.getString(R.string.feedPendientes))}; 	// uri: http://www.meneame.net/rss2.php?status=queued
-        
-        ArrayAdapter<Feed> feedAdapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_spinner_dropdown_item, feeds);
+        SpinnerAdapter feedAdapter = new ArrayAdapter<Feed> (this, android.R.layout.simple_spinner_dropdown_item, feeds);
+        ab.setListNavigationCallbacks(feedAdapter, new OnNavigationListener() {
+			
+			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+				
+				fetchFeed(feeds[itemPosition].getUrl());
+				return true;
+			}
+		} 
+        		);
+        //ArrayAdapter<Feed> feedAdapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_spinner_dropdown_item, feeds);
+        setContentView(R.layout.main);
         listaTitulares = (ListView) findViewById(R.id.titularesList);
-        final Spinner listaFeeds = (Spinner) findViewById(R.id.feedSpin);
+        //final Spinner listaFeeds = (Spinner) findViewById(R.id.feedSpin);
         ImageButton refreshBtn = (ImageButton) findViewById(R.id.refreshBtn);
         refreshBtn.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				Feed f = (Feed) listaFeeds.getSelectedItem();
+				Feed f = feeds[ab.getSelectedNavigationIndex()];
+				if (f==null)
+					Log.e(LOGTAG, "No hay un item seleccionado??");
 				Log.i(LOGTAG, "Recuperando feed " + f.getCategoria());
 				fetchFeed(f.getUrl());
 			}
@@ -135,17 +162,19 @@ public class Meneappme extends Activity {
     			Log.i("Task","recuperados " + result.size() + " feeds");
         		//setProgress(50);
         		datos = result;
-        		TitularAdapter ta = (TitularAdapter) listaTitulares.getAdapter();
+        		listaTitulares.setAdapter(new TitularAdapter(Meneappme.this, datos));
+        		/*TitularAdapter ta = (TitularAdapter) listaTitulares.getAdapter();
         		if (ta!=null){
         			Log.i("Task", "Actualizando datos");
         			ta.setDatos(datos);
+        			
         			//setProgress(100);
         		}
         		else{
         			Log.w("Task", "no se pudo recuperar un adaptador de titulares, creamos uno nuevo");
         			listaTitulares.setAdapter(new TitularAdapter(Meneappme.this, datos));
         			//setProgress(100);
-        		}
+        		}*/
     		}
     		else{
     			AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
