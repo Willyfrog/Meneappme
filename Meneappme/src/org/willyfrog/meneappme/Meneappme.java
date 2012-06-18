@@ -46,16 +46,21 @@ public class Meneappme extends Activity {
 	static final String LOGTAG = "Meneapp";
 	private List<Titular> datos;
 	
-	private Feed[] feeds; 
+	private Feed[] feeds;	//contiene los feeds a los que se puede navegar 
 
-	private ListView listaTitulares;
+	private ListView listaTitulares; //contiene la lista de titulares + metainfo
 	
-	private ActionBar abar;
+	private ActionBar abar;	//handle donde dejar la ActionBar y poder trastear con ella desde diversos sitios
 	
+	/**
+	 * Ejecuta la tarea de traer los nuevos titulares sacados de la url proporcionada
+	 * @param url Direccion url de algun feed de titulares de meneame
+	 */
 	private void fetchFeed(String url){
 		new FetchFeedTask().execute(url);
 	}
 	
+	// lee de layout/menu.xml y forma los items del menu de la actionbar
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 			Boolean res = super.onCreateOptionsMenu(menu);
@@ -64,12 +69,15 @@ public class Meneappme extends Activity {
 			return res;
 	}
 	
+	//si se seleeciona un item de la Actionbar, aqui se hace algo
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		//se deberia comprobar el id del menu item, pero mientras solo haya una accion posible
 		fetchFeed(feeds[abar.getSelectedNavigationIndex()].getUrl());
 		return super.onOptionsItemSelected(item);
 	}
 	
+	//Opciones contextuales del item
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -83,17 +91,20 @@ public class Meneappme extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOGTAG, "Arrancando");
+        
+        //Establecemos la ActionBar como la queremos
         abar = getActionBar();
         abar.setNavigationMode(abar.NAVIGATION_MODE_LIST);
         abar.setDisplayShowTitleEnabled(false);
         
-        //TODO: aï¿½adir opciones a la barra
+        //Generamos la lista de Feeds y los añadimos a la actionbar
         feeds = new Feed[] {
     			new Feed("Portada", this.getString(R.string.feedPortada) + "?rows=30"),	// TODO: parametrizar numero de items
     			new Feed("Pendientes", this.getString(R.string.feedPendientes))}; 	// uri: http://www.meneame.net/rss2.php?status=queued
         SpinnerAdapter feedAdapter = new ArrayAdapter<Feed> (this, android.R.layout.simple_spinner_dropdown_item, feeds);
         abar.setListNavigationCallbacks(feedAdapter, new OnNavigationListener() {
 			
+        	//Si pulsas sobre el item del menu, trae el feed apropiado
 			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 				
 				fetchFeed(feeds[itemPosition].getUrl());
@@ -101,12 +112,15 @@ public class Meneappme extends Activity {
 			}
 		} 
         		);
-        //ArrayAdapter<Feed> feedAdapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_spinner_dropdown_item, feeds);
-        setContentView(R.layout.main);
+
+        setContentView(R.layout.main); //Establece la vista
+        
+        //Hacemos la primera carga de titulares
         listaTitulares = (ListView) findViewById(R.id.titularesList);
         registerForContextMenu(listaTitulares);
         listaTitulares.setOnItemClickListener(new OnItemClickListener() {
 
+        	//Si pulsamos sobre un item, lo abrimos en una activity nueva
 			public void onItemClick(AdapterView<?> adaptador, View view, int position,
 					long id) {
 				Titular t = (Titular) listaTitulares.getItemAtPosition(position);
@@ -119,35 +133,40 @@ public class Meneappme extends Activity {
 			}
         	
 		});
-        
-        //final Spinner listaFeeds = (Spinner) findViewById(R.id.feedSpin);
 
         datos = new ArrayList<Titular>();
 		fetchFeed(this.getString(R.string.feedPortada) + "&rows=20"); //TODO: parametrizar
-		/*if (datos == null){
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("No hay conexion a internet");
-			AlertDialog alerta = builder.show();
-			
-		}
-		else{	
-			listaTitulares.setAdapter(new TitularAdapter(this, datos));
-		}
-        listaFeeds.setAdapter(feedAdapter);*/
         
     }
     
-    protected class FetchFeedTask extends AsyncTask<String, ProgressBar, List<Titular>> {
+    /**
+     * Clase para traer feeds de meneame como tarea en background
+     * @author gvaya
+     *
+     */
+    protected class FetchFeedTask extends AsyncTask<String, Integer, List<Titular>> {
     	
+    	ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+    	
+    	@Override
+    	protected void onProgressUpdate(Integer... values) {
+    		// TODO Auto-generated method stub
+    		Log.d("Progress", "actualizado con valor: " + values[0]);
+    		progressBar.setProgress(values[0]);
+    		super.onProgressUpdate(values);
+    	}
+    	
+    	//lanzamos la tarea, se llama con execute
     	@Override
     	protected List<Titular> doInBackground(String... params) {
     		URL feedUrl = null;
     		InputStream feed = null;
+    		
     		setProgress(0);
     		try
     		{
     			 feedUrl = new URL(params[0]);
-    			 setProgress(15);
+    			 publishProgress(15);
     		}
     		catch (MalformedURLException e) {
     			/*AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
@@ -158,15 +177,11 @@ public class Meneappme extends Activity {
     		if (feedUrl!=null)
     		{	
     			try{
+    				 publishProgress(25);
     				 feed = feedUrl.openConnection().getInputStream();
-    				 setProgress(25);
     			}
     			catch (IOException e) {
-    				/*AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
-    				builder.setMessage("Error al intentar recuperar el feed");
-    				AlertDialog alerta = builder.create();*/
     				Log.e("Parser", "error al intentar coger el feed: " + e.getMessage());
-    				//throw new RuntimeException(e); //TODO: convertir a error legible por el usuario
     				e.printStackTrace();
     			}
     			if (feed!=null){
@@ -177,6 +192,7 @@ public class Meneappme extends Activity {
     		return null;
     	}
 
+    	//cuando la tarea vuelve, qué hacemos?
     	@Override
     	protected void onPostExecute(List<Titular> result) {
     		super.onPostExecute(result); 
@@ -186,19 +202,7 @@ public class Meneappme extends Activity {
         		//setProgress(50);
         		datos = result;
         		listaTitulares.setAdapter(new TitularAdapter(Meneappme.this, datos));
-        		setProgress(100);
-        		/*TitularAdapter ta = (TitularAdapter) listaTitulares.getAdapter();
-        		if (ta!=null){
-        			Log.i("Task", "Actualizando datos");
-        			ta.setDatos(datos);
-        			
-        			setProgress(100);
-        		}
-        		else{
-        			Log.w("Task", "no se pudo recuperar un adaptador de titulares, creamos uno nuevo");
-        			listaTitulares.setAdapter(new TitularAdapter(Meneappme.this, datos));
-        			setProgress(100);
-        		}*/
+        		publishProgress(100);
     		}
     		else{
     			AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
