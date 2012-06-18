@@ -12,14 +12,20 @@ import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -47,19 +53,29 @@ public class Meneappme extends Activity {
 	private ActionBar abar;
 	
 	private void fetchFeed(String url){
-		//ProgressDialog progreso = ProgressDialog.show(this, "De camino a buscar los titulares", "Por favor, espere...", true);
 		new FetchFeedTask().execute(url);
-
-		//progreso.hide();
 	}
 	
-	/*@Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 			Boolean res = super.onCreateOptionsMenu(menu);
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(R.layout.menu, menu);
 			return res;
-	}*/
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		fetchFeed(feeds[abar.getSelectedNavigationIndex()].getUrl());
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		//Opciones contextuales
+	}
 	
 	
     /** Called when the activity is first created. */
@@ -67,16 +83,16 @@ public class Meneappme extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOGTAG, "Arrancando");
-        final ActionBar ab = getActionBar();
-        ab.setNavigationMode(ab.NAVIGATION_MODE_LIST);
-        ab.setDisplayShowTitleEnabled(false);
+        abar = getActionBar();
+        abar.setNavigationMode(abar.NAVIGATION_MODE_LIST);
+        abar.setDisplayShowTitleEnabled(false);
         
-        //TODO: añadir opciones a la barra
+        //TODO: aï¿½adir opciones a la barra
         feeds = new Feed[] {
     			new Feed("Portada", this.getString(R.string.feedPortada) + "?rows=30"),	// TODO: parametrizar numero de items
     			new Feed("Pendientes", this.getString(R.string.feedPendientes))}; 	// uri: http://www.meneame.net/rss2.php?status=queued
         SpinnerAdapter feedAdapter = new ArrayAdapter<Feed> (this, android.R.layout.simple_spinner_dropdown_item, feeds);
-        ab.setListNavigationCallbacks(feedAdapter, new OnNavigationListener() {
+        abar.setListNavigationCallbacks(feedAdapter, new OnNavigationListener() {
 			
 			public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 				
@@ -88,18 +104,24 @@ public class Meneappme extends Activity {
         //ArrayAdapter<Feed> feedAdapter = new ArrayAdapter<Feed>(this, android.R.layout.simple_spinner_dropdown_item, feeds);
         setContentView(R.layout.main);
         listaTitulares = (ListView) findViewById(R.id.titularesList);
-        //final Spinner listaFeeds = (Spinner) findViewById(R.id.feedSpin);
-        ImageButton refreshBtn = (ImageButton) findViewById(R.id.refreshBtn);
-        refreshBtn.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
-				Feed f = feeds[ab.getSelectedNavigationIndex()];
-				if (f==null)
-					Log.e(LOGTAG, "No hay un item seleccionado??");
-				Log.i(LOGTAG, "Recuperando feed " + f.getCategoria());
-				fetchFeed(f.getUrl());
+        registerForContextMenu(listaTitulares);
+        listaTitulares.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> adaptador, View view, int position,
+					long id) {
+				Titular t = (Titular) listaTitulares.getItemAtPosition(position);
+				//TODO: pasar la url a la actividad
+				Bundle b = new Bundle();
+				b.putString("url", t.getUrl().toString());
+				Intent intent = new Intent(Meneappme.this, VerWeb.class);
+				intent.putExtras(b);
+				startActivity(intent);
 			}
+        	
 		});
+        
+        //final Spinner listaFeeds = (Spinner) findViewById(R.id.feedSpin);
+
         datos = new ArrayList<Titular>();
 		fetchFeed(this.getString(R.string.feedPortada) + "&rows=20"); //TODO: parametrizar
 		/*if (datos == null){
@@ -121,11 +143,11 @@ public class Meneappme extends Activity {
     	protected List<Titular> doInBackground(String... params) {
     		URL feedUrl = null;
     		InputStream feed = null;
-    		//setProgress(0);
+    		setProgress(0);
     		try
     		{
     			 feedUrl = new URL(params[0]);
-    			 //setProgress(15);
+    			 setProgress(15);
     		}
     		catch (MalformedURLException e) {
     			/*AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
@@ -137,7 +159,7 @@ public class Meneappme extends Activity {
     		{	
     			try{
     				 feed = feedUrl.openConnection().getInputStream();
-    				 //setProgress(25);
+    				 setProgress(25);
     			}
     			catch (IOException e) {
     				/*AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
@@ -164,17 +186,18 @@ public class Meneappme extends Activity {
         		//setProgress(50);
         		datos = result;
         		listaTitulares.setAdapter(new TitularAdapter(Meneappme.this, datos));
+        		setProgress(100);
         		/*TitularAdapter ta = (TitularAdapter) listaTitulares.getAdapter();
         		if (ta!=null){
         			Log.i("Task", "Actualizando datos");
         			ta.setDatos(datos);
         			
-        			//setProgress(100);
+        			setProgress(100);
         		}
         		else{
         			Log.w("Task", "no se pudo recuperar un adaptador de titulares, creamos uno nuevo");
         			listaTitulares.setAdapter(new TitularAdapter(Meneappme.this, datos));
-        			//setProgress(100);
+        			setProgress(100);
         		}*/
     		}
     		else{

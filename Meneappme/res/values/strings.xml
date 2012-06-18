@@ -7,5 +7,8 @@
     <string name="feedPendientes">http://www.meneame.net/rss2.php?status=queued</string>
     <string name="portada">Portada</string>
     <string name="pendientes">Pendientes</string>
+    <string name="refresh">Refresca</string>
+    <string name="compartir">Comparte</string>
+    <string name="abrirNavegador">Navegador</string>
 
 </resources>

@@ -20,28 +20,22 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
          />
-
+
     <LinearLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.75"
-        android:gravity="right" >
+        android:layout_height="26dp" >
         
-        <ImageButton
-            android:id="@+id/placeholder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_delete"
-            android:contentDescription="Placeholder Adds"
-             />
-
-        <ImageButton
-            android:id="@+id/refreshBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/stat_notify_sync" 
-            android:contentDescription="Recargar noticias"/>
+        <TextView
+           	android:id="@+id/adPlaceholder"
+           	android:layout_width="fill_parent"
+           	android:layout_height="wrap_content"
+           	android:gravity="center"
+           	android:background="#eee"
+           	android:text="Ads aqui en algun momento"
+           	android:textColor="#222"
+           	 
+            />
 
     </LinearLayout>
 
