@@ -36,11 +36,6 @@ public class VerWeb extends Activity {
 			intent.setType("text/plain");
 			setShareIntent(intent);
 			
-			//generamos el intent de navegar ¿¿no puedo tener 2??
-			//MenuItem navItem = menu.findItem(R.id.abrirNavegador);
-			//navegador = (ShareActionProvider) navItem.getActionProvider();
-
-			//setNavegadorIntent(navIntent);
 			return res;
 	}
 	
