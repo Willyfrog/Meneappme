@@ -28,7 +28,7 @@ public class VerWeb extends Activity {
 			inflater.inflate(R.layout.webmenu, menu);
 			MenuItem item = menu.findItem(R.id.compartirAction);
 			compartidor = (ShareActionProvider) item.getActionProvider();
-			
+			compartidor.setShareHistoryFileName(null);
 			//generamos el intent de compartir
 			Intent intent = new Intent();
 			intent.setAction(Intent.ACTION_SEND);
@@ -36,13 +36,11 @@ public class VerWeb extends Activity {
 			intent.setType("text/plain");
 			setShareIntent(intent);
 			
-			//generamos el intent de navegar
-			MenuItem navItem = menu.findItem(R.id.abrirNavegador);
-			navegador = (ShareActionProvider) navItem.getActionProvider();
-			Intent navIntent = new Intent();
-			navIntent.setAction(Intent.ACTION_VIEW);
-			navIntent.setData(Uri.parse(url));
-			setNavegadorIntent(navIntent);
+			//generamos el intent de navegar ¿¿no puedo tener 2??
+			//MenuItem navItem = menu.findItem(R.id.abrirNavegador);
+			//navegador = (ShareActionProvider) navItem.getActionProvider();
+
+			//setNavegadorIntent(navIntent);
 			return res;
 	}
 	
@@ -53,12 +51,12 @@ public class VerWeb extends Activity {
 
 	}
 
-	private void setNavegadorIntent(Intent shareIntent) {
+	/*private void setNavegadorIntent(Intent shareIntent) {
 		if (navegador != null){
 			navegador.setShareIntent(shareIntent);
 		}
 
-	}
+	}*/
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -66,7 +64,10 @@ public class VerWeb extends Activity {
 			startActivity(item.getIntent());
 		}
 		else if (item.getItemId()==R.id.abrirNavegador) {
-			startActivity(item.getIntent());
+			Intent navIntent = new Intent(); //no pudeo tener 2 shareactionprovider?
+			navIntent.setAction(Intent.ACTION_VIEW);
+			navIntent.setData(Uri.parse(url));
+			startActivity(navIntent);
 		}
 		return super.onOptionsItemSelected(item);
 	}

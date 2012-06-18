@@ -12,7 +12,6 @@
         android:id="@+id/abrirNavegador"
         android:title="@string/abrirNavegador"
         android:showAsAction="ifRoom|withText"
-        android:icon="@android:drawable/ic_menu_compass"
-        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="@android:drawable/ic_menu_send"
         />
 </menu>
