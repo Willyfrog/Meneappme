@@ -16,7 +16,9 @@ public class Titular {
 	private String numComentarios;
 	private String descripcion;
 	private URL feedComentarios;
+	private String urlComentarios;
 	
+
 	public Titular(){
 		this("Vacio","Anonimo","");
 	}
@@ -33,6 +35,14 @@ public class Titular {
 		this.negativos = negativos;
 		this.numComentarios = numComents;
 		setFeedComentarios(comentarios);				
+	}
+	
+	public String getUrlComentarios() {
+		return urlComentarios;
+	}
+
+	public void setUrlComentarios(String urlComentarios) {
+		this.urlComentarios = urlComentarios;
 	}
 	
 	public String getTitulo() {

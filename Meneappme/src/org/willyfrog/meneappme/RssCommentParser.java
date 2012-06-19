@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.text.Html;
 import android.util.Log;
 
 public class RssCommentParser {
@@ -65,8 +66,8 @@ public class RssCommentParser {
 						Log.d("DomParser", info.toString());
 						//Log.d("DomParser", "add karma:" + karma );
 						comentario.setNumber(obtenerTexto(info));
-					}else if(eti.equals("meneame:description")){
-						String descripcion = obtenerTexto(info);
+					}else if(eti.equals("description")){
+						String descripcion = Html.fromHtml(obtenerTexto(info)).toString();
 						Log.d("DomParser", "add negativos: " + descripcion);
 						comentario.setTexto(descripcion);
 					}

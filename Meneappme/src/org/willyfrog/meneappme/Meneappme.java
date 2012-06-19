@@ -142,6 +142,7 @@ public class Meneappme extends Activity {
 				b.putString("descripcion", t.getDescripcion());
 				b.putString("feed", t.getFeedComentarios().toString());
 				b.putString("url", t.getUrl().toString());
+				b.putString("urlComentarios", t.getUrlComentarios());
 				Intent intent = new Intent(Meneappme.this, CommentView.class);
 				intent.putExtras(b);
 				startActivity(intent);

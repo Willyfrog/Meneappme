@@ -28,7 +28,8 @@ public class CommentView extends Activity {
 
 	ActionBar abar;
 	String feed; //feed RSS
-	String url;  //url comentarios meneame
+	String url;  
+	String urlComments; //url comentarios meneame
 	String autor;
 	String titulo;
 	String descripcion;
@@ -48,7 +49,7 @@ public class CommentView extends Activity {
 			//generamos el intent de compartir
 			Intent intent = new Intent();
 			intent.setAction(Intent.ACTION_SEND);
-			intent.putExtra(Intent.EXTRA_TEXT, url);
+			intent.putExtra(Intent.EXTRA_TEXT, urlComments);
 			intent.setType("text/plain");
 			setShareIntent(intent);
 			listaComentarios = (ListView) findViewById(R.id.listaComentarios);
@@ -71,7 +72,7 @@ public class CommentView extends Activity {
 		else if (item.getItemId()==R.id.abrirNavegador) {
 			Intent navIntent = new Intent(); //no pudeo tener 2 shareactionprovider?
 			navIntent.setAction(Intent.ACTION_VIEW);
-			navIntent.setData(Uri.parse(url));
+			navIntent.setData(Uri.parse(urlComments));
 			startActivity(navIntent);
 		}
 		return super.onOptionsItemSelected(item);
@@ -91,16 +92,19 @@ public class CommentView extends Activity {
 		Bundle b = getIntent().getExtras();
 		feed = b.getString("feed");
 		url = b.getString("url");
+		urlComments = b.getString("urlComentarios");
 		autor = b.getString("autor");
 		titulo = b.getString("titulo");
 		descripcion = b.getString("descripcion");
 		abar = getActionBar();
-		abar.setTitle("Comentarios");
+		abar.setTitle(titulo);
 		setContentView(R.layout.comments);
 		TextView title = (TextView) findViewById(R.id.tituloComment);
 		title.setText(titulo);
 		TextView author = (TextView) findViewById(R.id.autorComment);
 		author.setText(autor);
+		TextView urlText = (TextView) findViewById(R.id.urlComment);
+		urlText.setText(url);
 		TextView desc = (TextView) findViewById(R.id.cuerpoComment);
 		desc.setText(descripcion);
 		fetchFeed(feed);

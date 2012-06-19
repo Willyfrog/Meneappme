@@ -14,14 +14,14 @@
         android:id="@+id/urlComment"
         android:layout_width="match_parent" 
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:color="#22f"
+        android:textSize="8sp"
+        android:textColor="#22f"
         />
     <TextView
         android:id="@+id/cuerpoComment"
         android:layout_width="match_parent" 
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textSize="10sp"
         />
     <TextView
         android:id="@+id/autorComment"

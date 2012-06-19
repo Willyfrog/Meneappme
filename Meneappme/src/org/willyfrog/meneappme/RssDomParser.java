@@ -80,13 +80,21 @@ public class RssDomParser {
 						//Log.d("DomParser", "add negativos: " + negat);
 						titular.setNegativos(negat);
 					}else if(eti.equals("description")){
-						String desc = obtenerTexto(info);
-						Log.d("DomParser", "add descripcion: " + desc);
-						titular.setDescripcion(Html.fromHtml(desc).toString());
+						String[] desc = Html.fromHtml(obtenerTexto(info)).toString().split("\\n");
+						//Log.d("DomParser", "add descripcion: " + desc[0]);
+						//Log.d("DomParser", "add descripcion: " + desc[1]);
+						Log.d("DomParser", "add descripcion: " + desc[2]);
+						//Log.d("DomParser", "add descripcion: " + desc[3]);
+						titular.setDescripcion(desc[2]);
+						//TODO: ya puestos, se pueden guardar las categorias
 					}else if(eti.equals("wfw:commentRss")){
 						String feedc = obtenerTexto(info);
-						Log.d("DomParser", "add descripcion: " + feedc);
+						Log.d("DomParser", "add feedcomentarios: " + feedc);
 						titular.setFeedComentarios(feedc);
+					}else if(eti.equals("comments")){
+						String coments = obtenerTexto(info);
+						Log.d("DomParser", "add urlcomentarios: " + coments);
+						titular.setUrlComentarios(coments);
 					}
 					else{
 						Log.d("DomParser", "Sin manejar: " + info.getNodeName());
