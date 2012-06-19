@@ -1,6 +1,5 @@
 package org.willyfrog.meneappme;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.text.Html;
 import android.util.Log;
 
 public class RssDomParser {
@@ -58,13 +58,13 @@ public class RssDomParser {
 					String eti = info.getNodeName();
 					
 					if (eti.equals("title")){
-						Log.d("DomParser", "add titulo");
+						//Log.d("DomParser", "add titulo");
 						titular.setTitulo(obtenerTexto(info));
 					}else if(eti.equals("meneame:url")){
-						Log.d("DomParser", "add link");
+						//Log.d("DomParser", "add link");
 						titular.setUrl(obtenerTexto(info));
 					}else if(eti.equals("meneame:user")){
-						Log.d("DomParser", "add autor");
+						//Log.d("DomParser", "add autor");
 						titular.setAutor(obtenerTexto(info));
 					}else if(eti.equals("meneame:karma")){
 						//Integer karma = Integer.getInteger(obtenerTexto(info));
@@ -73,12 +73,20 @@ public class RssDomParser {
 						titular.setKarma(obtenerTexto(info));
 					}else if(eti.equals("meneame:votes")){
 						String posit = obtenerTexto(info);
-						Log.d("DomParser", "add positivos: " + posit);
+						//Log.d("DomParser", "add positivos: " + posit);
 						titular.setPositivos(posit);
 					}else if(eti.equals("meneame:negatives")){
 						String negat = obtenerTexto(info);
-						Log.d("DomParser", "add negativos: " + negat);
+						//Log.d("DomParser", "add negativos: " + negat);
 						titular.setNegativos(negat);
+					}else if(eti.equals("description")){
+						String desc = obtenerTexto(info);
+						Log.d("DomParser", "add descripcion: " + desc);
+						titular.setDescripcion(Html.fromHtml(desc).toString());
+					}else if(eti.equals("wfw:commentRss")){
+						String feedc = obtenerTexto(info);
+						Log.d("DomParser", "add descripcion: " + feedc);
+						titular.setFeedComentarios(feedc);
 					}
 					else{
 						Log.d("DomParser", "Sin manejar: " + info.getNodeName());

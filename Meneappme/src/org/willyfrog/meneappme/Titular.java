@@ -14,6 +14,7 @@ public class Titular {
 	private String negativos;
 	private String karma;
 	private String numComentarios;
+	private String descripcion;
 	private URL feedComentarios;
 	
 	public Titular(){
@@ -120,6 +121,12 @@ public class Titular {
 		}
 	}
 	
-	
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}	
 	
 }

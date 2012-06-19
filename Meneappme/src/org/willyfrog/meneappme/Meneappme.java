@@ -11,26 +11,22 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 
@@ -97,7 +93,7 @@ public class Meneappme extends Activity {
         abar.setNavigationMode(abar.NAVIGATION_MODE_LIST);
         abar.setDisplayShowTitleEnabled(false);
         
-        //Generamos la lista de Feeds y los añadimos a la actionbar
+        //Generamos la lista de Feeds y los aï¿½adimos a la actionbar
         feeds = new Feed[] {
     			new Feed("Portada", this.getString(R.string.feedPortada) + "?rows=30"),	// TODO: parametrizar numero de items
     			new Feed("Pendientes", this.getString(R.string.feedPendientes))}; 	// uri: http://www.meneame.net/rss2.php?status=queued
@@ -133,6 +129,26 @@ public class Meneappme extends Activity {
 			}
         	
 		});
+        
+        listaTitulares.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> adaptador, View view,
+					int pos, long id) {
+				Log.d("ListView", "Long live the click!");
+				Titular t = (Titular) listaTitulares.getItemAtPosition(pos);
+				Bundle b = new Bundle();
+				b.putString("titulo", t.getTitulo());
+				b.putString("autor", t.getAutor());
+				b.putString("descripcion", t.getDescripcion());
+				b.putString("feed", t.getFeedComentarios().toString());
+				b.putString("url", t.getUrl().toString());
+				Intent intent = new Intent(Meneappme.this, CommentView.class);
+				intent.putExtras(b);
+				startActivity(intent);
+				return true;
+			}
+        	
+		});
 
         datos = new ArrayList<Titular>();
 		fetchFeed(this.getString(R.string.feedPortada) + "&rows=20"); //TODO: parametrizar
@@ -162,7 +178,7 @@ public class Meneappme extends Activity {
     		URL feedUrl = null;
     		InputStream feed = null;
     		
-    		setProgress(0);
+    		publishProgress(0);
     		try
     		{
     			 feedUrl = new URL(params[0]);
@@ -192,7 +208,7 @@ public class Meneappme extends Activity {
     		return null;
     	}
 
-    	//cuando la tarea vuelve, qué hacemos?
+    	//cuando la tarea vuelve, quï¿½ hacemos?
     	@Override
     	protected void onPostExecute(List<Titular> result) {
     		super.onPostExecute(result); 

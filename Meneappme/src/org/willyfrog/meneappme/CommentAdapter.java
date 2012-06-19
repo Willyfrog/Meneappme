@@ -39,7 +39,7 @@ public class CommentAdapter extends ArrayAdapter<Comentario> {
 			item = inflater.inflate(R.layout.listitem_comment, null);
 			holder = new ViewHolder();
 			
-			holder.texto = (TextView) item.findViewById(R.id.LblTitulo);
+			holder.texto = (TextView) item.findViewById(R.id.LblTexto);
 			holder.autor = (TextView) item.findViewById(R.id.LblAutor);
 			holder.number = (TextView) item.findViewById(R.id.LblNumber);
 			
@@ -55,7 +55,7 @@ public class CommentAdapter extends ArrayAdapter<Comentario> {
 		TextView lblTexto = (TextView) item.findViewById(R.id.LblTexto);
 		lblTexto.setText(datos.get(position).getTexto());
 		
-		TextView lblAutor = (TextView) item.findViewById(R.id.LblDominio);
+		TextView lblAutor = (TextView) item.findViewById(R.id.LblAutorComment);
 		lblAutor.setText(datos.get(position).getAutor());
 		
 		return item;

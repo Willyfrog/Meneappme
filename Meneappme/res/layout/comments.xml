@@ -4,19 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <TextView
-        android:id="@+id/titulo"
+        android:id="@+id/tituloComment"
         android:layout_width="match_parent" 
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textStyle="bold"
         />
     <TextView
-        android:id="@+id/url"
+        android:id="@+id/urlComment"
         android:layout_width="match_parent" 
         android:layout_height="wrap_content"
         android:textSize="12sp"
+        android:color="#22f"
         />
     <TextView
-        android:id="@+id/autor"
+        android:id="@+id/cuerpoComment"
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        />
+    <TextView
+        android:id="@+id/autorComment"
         android:layout_width="match_parent" 
         android:layout_height="wrap_content"
         android:textSize="12sp"

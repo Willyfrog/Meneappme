@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.willyfrog.meneappme.Meneappme.FetchFeedTask;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,12 +22,16 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
+import android.widget.TextView;
 
 public class CommentView extends Activity {
 
 	ActionBar abar;
 	String feed; //feed RSS
 	String url;  //url comentarios meneame
+	String autor;
+	String titulo;
+	String descripcion;
 	ShareActionProvider compartidor;
 	List<Comentario> datos;
 	ListView listaComentarios;
@@ -71,15 +77,33 @@ public class CommentView extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/**
+	 * Ejecuta la tarea de traer los nuevos comentarios sacados de la url proporcionada
+	 * @param url Direccion url de algun feed de comentarios de meneame
+	 */
+	private void fetchFeed(String url){
+		new FetchFeedTask().execute(url);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle b = getIntent().getExtras();
 		feed = b.getString("feed");
 		url = b.getString("url");
+		autor = b.getString("autor");
+		titulo = b.getString("titulo");
+		descripcion = b.getString("descripcion");
 		abar = getActionBar();
 		abar.setTitle("Comentarios");
 		setContentView(R.layout.comments);
+		TextView title = (TextView) findViewById(R.id.tituloComment);
+		title.setText(titulo);
+		TextView author = (TextView) findViewById(R.id.autorComment);
+		author.setText(autor);
+		TextView desc = (TextView) findViewById(R.id.cuerpoComment);
+		desc.setText(descripcion);
+		fetchFeed(feed);
 		
 	}
 
@@ -87,14 +111,14 @@ public class CommentView extends Activity {
 	
 protected class FetchFeedTask extends AsyncTask<String, Integer, List<Comentario>> {
     	
-    	ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+    	//ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
     	
-    	@Override
+    	/*@Override
     	protected void onProgressUpdate(Integer... values) {
     		//Log.d("Progress", "actualizado con valor: " + values[0]);
     		progressBar.setProgress(values[0]);
     		super.onProgressUpdate(values);
-    	}
+    	}*/
     	
     	//lanzamos la tarea, se llama con execute
     	@Override
@@ -102,11 +126,11 @@ protected class FetchFeedTask extends AsyncTask<String, Integer, List<Comentario
     		URL feedUrl = null;
     		InputStream feed = null;
     		
-    		setProgress(0);
+    		//setProgress(0);
     		try
     		{
     			 feedUrl = new URL(params[0]);
-    			 publishProgress(15);
+    			 //publishProgress(15);
     		}
     		catch (MalformedURLException e) {
     			/*AlertDialog.Builder builder = new AlertDialog.Builder(Meneappme.this);
@@ -117,7 +141,7 @@ protected class FetchFeedTask extends AsyncTask<String, Integer, List<Comentario
     		if (feedUrl!=null)
     		{	
     			try{
-    				 publishProgress(25);
+    				 //publishProgress(25);
     				 feed = feedUrl.openConnection().getInputStream();
     			}
     			catch (IOException e) {
@@ -132,7 +156,7 @@ protected class FetchFeedTask extends AsyncTask<String, Integer, List<Comentario
     		return null;
     	}
 
-    	//cuando la tarea vuelve, qué hacemos?
+    	//cuando la tarea vuelve, quï¿½ hacemos?
     	@Override
     	protected void onPostExecute(List<Comentario> result) {
     		super.onPostExecute(result); 
@@ -142,7 +166,7 @@ protected class FetchFeedTask extends AsyncTask<String, Integer, List<Comentario
         		//setProgress(50);
         		datos = result;
         		listaComentarios.setAdapter(new CommentAdapter(CommentView.this, datos));
-        		publishProgress(100);
+        		//publishProgress(100);
     		}
     		else{
     			AlertDialog.Builder builder = new AlertDialog.Builder(CommentView.this);
