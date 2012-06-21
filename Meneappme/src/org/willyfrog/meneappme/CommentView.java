@@ -110,7 +110,6 @@ public class CommentView extends Activity {
 		fetchFeed(feed);
 		
 	}
-
 	
 	
 protected class FetchFeedTask extends AsyncTask<String, Integer, List<Comentario>> {
