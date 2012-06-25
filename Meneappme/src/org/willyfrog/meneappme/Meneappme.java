@@ -29,8 +29,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SpinnerAdapter;
 
-
-
 public class Meneappme extends Activity {
 	
 	/*private Titular[] datos = new Titular[] {

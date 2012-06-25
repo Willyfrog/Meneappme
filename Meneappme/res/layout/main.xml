@@ -35,6 +35,7 @@
            	android:text="Ads aqui en algun momento"
            	android:textColor="#222"
             />
+		
 
     </LinearLayout>
 
